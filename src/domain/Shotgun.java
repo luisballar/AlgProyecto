@@ -14,7 +14,7 @@ public class Shotgun {
     private String caracteres;
     private LinkedList<String> listaFragmentos = new LinkedList<String>();
     ArchivoDAO archivoDAO = new ArchivoDAO();
-    String path = "text.txt";
+    String path = "texto.txt";
     String nuevoPath = "fragmentos.txt";
 
 
