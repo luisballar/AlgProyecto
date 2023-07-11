@@ -34,18 +34,6 @@ public class ArchivoDAO {
         }
     }
 
-    /*
-    //Método general para leer un archivo
-    public BufferedReader getReadFile(String nameFile) throws FileNotFoundException {
-        File file = new File(nameFile);
-        FileInputStream fis = new FileInputStream(file);
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader br = new BufferedReader(isr);
-          return br;
-    }
-
-     */
-
     public String leerArchivo(String path){
         StringBuilder sb =  new StringBuilder();
         File archivo = new File(path);
@@ -60,5 +48,25 @@ public class ArchivoDAO {
         }
         return sb.toString();
     }
+
+    public int contarFragmentosEnArchivo(String filePath) {
+        int contador = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String linea;
+
+            while ((linea = reader.readLine()) != null) {
+                // Verificar si la línea no está vacía
+                if (!linea.trim().isEmpty()) {
+                    contador++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return contador;
+    }
+
 
 }

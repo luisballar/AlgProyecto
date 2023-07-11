@@ -4,7 +4,9 @@ package domain;
 import services.ArchivoDAO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Shotgun {
@@ -12,16 +14,19 @@ public class Shotgun {
     private int fragmentos;
     private int longitud;
     private String caracteres;
-    private LinkedList<String> listaFragmentos = new LinkedList<String>();
+    private List<String> listaFragmentos = new LinkedList<>();
     ArchivoDAO archivoDAO = new ArchivoDAO();
     String path = "texto.txt";
     String nuevoPath = "fragmentos.txt";
+
+    public List<String> getListaFragmentos() {
+        return listaFragmentos;
+    }
 
 
     // cuenta los caracteres del archivo
     public int totalCaracteres() throws IOException {
         caracteres = archivoDAO.leerArchivo(path);
-
         return caracteres.length();
     }
 
@@ -45,6 +50,9 @@ public class Shotgun {
 
     // fragmentador
     public void fragmentador(int cantFragmentos, int longitud) throws IOException {
+
+        this.fragmentos = cantFragmentos;
+
         StringBuilder sb = new StringBuilder();
 
         this.longitud = longitud;
@@ -58,9 +66,9 @@ public class Shotgun {
             // agrega el fragmento a una lista
             listaFragmentos.add(nuevoFragmento);
         }
-
         // agregar al archivo
         archivoDAO.insertarTexto(nuevoPath, sb.toString());
     }
+
 
 }
