@@ -2,10 +2,7 @@ package domain;
 
 import services.ArchivoDAO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 class Node {
     String sequence;
@@ -15,15 +12,20 @@ class Node {
         this.sequence = sequence;
         this.edges = new ArrayList<>();
     }
-
 }
 
 public class AssemblyOverlapGraph {
+    private Shotgun sgn;
     String nuevoPath = "fragmentos.txt";
     List<Node> graph;
 
     public AssemblyOverlapGraph() {
         graph = new ArrayList<>();
+    }
+
+    // apunta a memoria a shotgun
+    public void asignarShotgun(Shotgun shotgun){
+        this.sgn = shotgun;
     }
 
     public void addNode(String sequence) {
@@ -54,11 +56,45 @@ public class AssemblyOverlapGraph {
         return fragmentos.toString();
     }
 
+    public void listaFragmentos(){
+        List<String> fragmentosLista = sgn.getListaFragmentos(); // Obtener la lista de fragmentos
 
+        for (int i = 0; i < fragmentosLista.size(); i++) {
+            String fragmento1 = fragmentosLista.get(i);
+
+            for (int j = i + 1; j < fragmentosLista.size(); j++) {
+                String fragmento2 = fragmentosLista.get(j);
+
+                // Comparar fragmento1 con fragmento2
+                int traslape = compararTraslape(fragmento1, fragmento2);
+                System.out.println("Traslape entre fragmento " + i + " y fragmento " + j + ": " + traslape);
+            }
+        }
+        System.out.println("VACIA");
+    }
+
+    // compara fragmentos
+    public int compararTraslape(String fragmento1, String fragmento2) {
+        int traslape = 0;
+
+        // Comparar cada subcadena de fragmento1 con fragmento2
+        for (int i = 0; i < fragmento1.length(); i++) {
+            String subcadena = fragmento1.substring(i);
+
+            if (fragmento2.startsWith(subcadena)) {
+                traslape = subcadena.length();
+                break;
+            }
+        }
+
+        return traslape;
+    }
+
+
+    // inserta los fragmentos en el grafo
     public void insertarFragmentos(int cantFragmentos) {
         String fragmentosTotales = devuelveFragmentos();
         StringTokenizer tokenizer = new StringTokenizer(fragmentosTotales, "\n");
-
 
         // insertar
         for (int i = 0; i < cantFragmentos; i++) {
@@ -68,16 +104,4 @@ public class AssemblyOverlapGraph {
         }
     }
 
-    public static void main(String[] args) {
-        AssemblyOverlapGraph assemblyGraph = new AssemblyOverlapGraph();
-        ArchivoDAO archivoDAO = new ArchivoDAO();
-
-        assemblyGraph.insertarFragmentos(archivoDAO.contarFragmentosEnArchivo("fragmentos.txt"));
-
-        // Imprimir el grafo
-        assemblyGraph.printGraph();
-
-        System.out.println(archivoDAO.contarFragmentosEnArchivo("fragmentos.txt"));
-
-    }
 }
