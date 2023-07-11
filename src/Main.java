@@ -8,7 +8,5 @@ public class Main {
 
         shotgun.fragmentador(133,15);
 
-
-
     }
 }

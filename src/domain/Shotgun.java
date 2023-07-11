@@ -17,11 +17,9 @@ public class Shotgun {
     String path = "texto.txt";
     String nuevoPath = "fragmentos.txt";
 
-
     // cuenta los caracteres del archivo
     public int totalCaracteres() throws IOException {
         caracteres = archivoDAO.leerArchivo(path);
-
         return caracteres.length();
     }
 
@@ -45,6 +43,9 @@ public class Shotgun {
 
     // fragmentador
     public void fragmentador(int cantFragmentos, int longitud) throws IOException {
+
+        this.fragmentos = cantFragmentos;
+
         StringBuilder sb = new StringBuilder();
 
         this.longitud = longitud;
