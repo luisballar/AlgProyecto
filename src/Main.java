@@ -10,8 +10,8 @@ public class Main {
         Shotgun shotgun = new Shotgun();
         ArchivoDAO archivoDAO = new ArchivoDAO();
 
-        shotgun.fragmentador(10,10);
-        Grafo grafo = new Grafo(10);
+        shotgun.fragmentador(100,5);
+        Grafo grafo = new Grafo(100);
 
         grafo.asignarShotgun(shotgun);
         grafo.compararFragmentos();
