@@ -38,4 +38,29 @@ class ShotgunTest {
         archivoDAO.generaArchivo(path);
 
     }
+
+    @Test
+    public void listarFragmentos_Funciona(){
+        listarFragmentos_Funciona();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

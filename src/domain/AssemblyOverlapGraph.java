@@ -1,10 +1,11 @@
+/*
 package domain;
 
 import services.ArchivoDAO;
 
 import java.util.*;
 
-class Node {
+class Node{
     String sequence;
     List<Integer> edges;
 
@@ -12,6 +13,7 @@ class Node {
         this.sequence = sequence;
         this.edges = new ArrayList<>();
     }
+
 }
 
 public class AssemblyOverlapGraph {
@@ -36,6 +38,7 @@ public class AssemblyOverlapGraph {
         graph.get(fromNodeIndex).edges.add(toNodeIndex);
     }
 
+    // imprime el grafo
     public void printGraph() {
         for (int i = 0; i < graph.size(); i++) {
             Node node = graph.get(i);
@@ -70,7 +73,6 @@ public class AssemblyOverlapGraph {
                 System.out.println("Traslape entre fragmento " + i + " y fragmento " + j + ": " + traslape);
             }
         }
-        System.out.println("VACIA");
     }
 
     // compara fragmentos
@@ -105,3 +107,5 @@ public class AssemblyOverlapGraph {
     }
 
 }
+
+ */
