@@ -84,6 +84,8 @@ public class Grafo {
                 // Comparar fragmento1 con fragmento2
                 int traslape = compararTraslape(fragmento1, fragmento2);
                 //System.out.println("Traslape entre fragmento " + i + " y fragmento " + j + ": " + traslape);
+
+                //si el traslape es 0 no los agrega al grafo
                 if(traslape!=0)
                     agregarArista(fragmento1, fragmento2, traslape);
             }
@@ -107,6 +109,8 @@ public class Grafo {
 
         return traslape;
     }
+
+
 
 
 }

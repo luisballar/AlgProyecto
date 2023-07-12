@@ -10,8 +10,13 @@ public class Main {
         Shotgun shotgun = new Shotgun();
         ArchivoDAO archivoDAO = new ArchivoDAO();
 
-        shotgun.fragmentador(100,5);
-        Grafo grafo = new Grafo(100);
+        // crear archivo
+        archivoDAO.generaArchivo("texto.txt");
+
+        int var = 100;
+
+        shotgun.fragmentador(var,5);
+        Grafo grafo = new Grafo(var);
 
         grafo.asignarShotgun(shotgun);
         grafo.compararFragmentos();
