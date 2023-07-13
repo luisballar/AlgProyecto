@@ -1,5 +1,6 @@
 package domain;
 
+import domain.Shotgun;
 import services.ArchivoDAO;
 
 import java.util.*;
@@ -11,7 +12,7 @@ public class Grafo {
     private List<List<Fragmento>> listaAdyacencia;
 
     // representa un nodo (fragmento) con su peso
-    class Fragmento {
+    public class Fragmento {
         String destino;
         String origen;
         int peso;
@@ -34,7 +35,7 @@ public class Grafo {
     }
 
     // apuntar en memoria a shotgun
-    public void asignarShotgun(Shotgun shotgun){
+    public void asignarShotgun(Shotgun shotgun) {
         this.sgn = shotgun;
     }
 
@@ -47,7 +48,7 @@ public class Grafo {
     private int obtenerIndiceNodo(String nodo) {
         List<String> fragmentosLista = sgn.getListaFragmentos(); // obtener la lista de fragmentos
 
-        for (int i = 0; i < fragmentosLista.size() ; i++) {
+        for (int i = 0; i < fragmentosLista.size(); i++) {
             if (fragmentosLista.get(i).equals(nodo)) {
                 return i;
             }
@@ -58,7 +59,7 @@ public class Grafo {
     public void imprimirGrafo() {
         for (int i = 0; i < numVertices; i++) {
             List<Fragmento> lista = listaAdyacencia.get(i);
-            System.out.println("Lista de adyacencia del fragmento " + i + ": " );
+            System.out.println("Lista de adyacencia del fragmento " + i + ": ");
             for (Fragmento fragmento : lista) {
                 System.out.println("-> Nodo: " + fragmento.destino + ", Peso: " + fragmento.peso);
             }
@@ -88,7 +89,7 @@ public class Grafo {
                 //System.out.println("Traslape entre fragmento " + i + " y fragmento " + j + ": " + traslape);
 
                 //si el traslape es 0 no los agrega al grafo
-                if(traslape!=0)
+                if (traslape != 0)
                     agregarArista(fragmento1, fragmento2, traslape);
             }
         }
@@ -112,11 +113,11 @@ public class Grafo {
         return traslape;
     }
 
-    // Algoritmo de Kruskal para encontrar el árbol de expansión mínima
-    public void kruskalMST() {
+    // Algoritmo de Kruskal para encontrar el árbol de expansión mínima con los nodos de mayor peso
+    public List<Fragmento> kruskalMST() {
         PriorityQueue<Fragmento> pq = new PriorityQueue<>(new Comparator<Fragmento>() {
             public int compare(Fragmento f1, Fragmento f2) {
-                return f1.peso - f2.peso;
+                return f2.peso - f1.peso; // orden descendente por peso
             }
         });
 
@@ -146,13 +147,15 @@ public class Grafo {
         }
 
         // Imprimir el árbol de expansión mínima
-        System.out.println("Árbol de Expansión Mínima:");
+        System.out.println("Árbol de Expansión Mínima (nodos de mayor peso):");
         for (Fragmento fragmento : mst) {
             System.out.println("-> Nodo: " + fragmento.destino + ", Peso: " + fragmento.peso);
         }
+
+        return mst;
     }
 
-    // Clase auxiliar para representar la estructura de conjunto disjunto
+    // clase auxiliar para representar la estructura de conjunto disjunto
     class DisjointSet {
         int[] padre;
 
@@ -175,5 +178,42 @@ public class Grafo {
             int conjuntoY = find(y);
             padre[conjuntoY] = conjuntoX;
         }
+    }
+
+    // construye el texto completo a partir de los fragmentos
+    public String construirTexto(List<Fragmento> arbolExpansion) {
+        StringBuilder texto = new StringBuilder();
+        Set<String> visitados = new HashSet<>();
+
+        // Agregar el primer fragmento al texto
+        Fragmento primerFragmento = arbolExpansion.get(0);
+        texto.append(primerFragmento.origen).append(primerFragmento.destino.substring(primerFragmento.peso));
+
+        visitados.add(primerFragmento.origen);
+        visitados.add(primerFragmento.destino);
+
+        // Construir el texto iterando sobre los fragmentos del árbol de expansión mínima
+        for (int i = 1; i < arbolExpansion.size(); i++) {
+            Fragmento fragmento = arbolExpansion.get(i);
+
+            // Si el origen ya ha sido visitado, agregar el sufijo del destino al texto
+            if (visitados.contains(fragmento.origen)) {
+                texto.append(fragmento.destino.substring(fragmento.peso));
+                visitados.add(fragmento.destino);
+            }
+            // Si el destino ya ha sido visitado, agregar el sufijo del origen al texto
+            else if (visitados.contains(fragmento.destino)) {
+                texto.append(fragmento.origen.substring(fragmento.peso));
+                visitados.add(fragmento.origen);
+            }
+        }
+
+        return texto.toString();
+    }
+
+    // Obtener el árbol de expansión mínima como lista de fragmentos
+    public List<Fragmento> obtenerArbolExpansionMinima() {
+        compararFragmentos();
+        return kruskalMST();
     }
 }
