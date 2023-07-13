@@ -13,9 +13,11 @@ public class Grafo {
     // representa un nodo (fragmento) con su peso
     class Fragmento {
         String destino;
+        String origen;
         int peso;
 
-        public Fragmento(String destino, int peso) {
+        public Fragmento(String origen, String destino, int peso) {
+            this.origen = origen;
             this.destino = destino;
             this.peso = peso;
         }
@@ -38,8 +40,8 @@ public class Grafo {
 
     // agrega nodos al grafo
     public void agregarArista(String origen, String destino, int peso) {
-        listaAdyacencia.get(obtenerIndiceNodo(origen)).add(new Fragmento(destino, peso));
-        listaAdyacencia.get(obtenerIndiceNodo(destino)).add(new Fragmento(origen, peso));
+        listaAdyacencia.get(obtenerIndiceNodo(origen)).add(new Fragmento(origen, destino, peso));
+        listaAdyacencia.get(obtenerIndiceNodo(destino)).add(new Fragmento(destino, origen, peso));
     }
 
     private int obtenerIndiceNodo(String nodo) {
@@ -110,8 +112,68 @@ public class Grafo {
         return traslape;
     }
 
+    // Algoritmo de Kruskal para encontrar el árbol de expansión mínima
+    public void kruskalMST() {
+        PriorityQueue<Fragmento> pq = new PriorityQueue<>(new Comparator<Fragmento>() {
+            public int compare(Fragmento f1, Fragmento f2) {
+                return f1.peso - f2.peso;
+            }
+        });
 
+        // Agregar todas las aristas a la cola de prioridad
+        for (int i = 0; i < numVertices; i++) {
+            List<Fragmento> lista = listaAdyacencia.get(i);
+            for (Fragmento fragmento : lista) {
+                pq.offer(fragmento);
+            }
+        }
 
+        // Estructura de conjunto para verificar ciclos
+        DisjointSet disjointSet = new DisjointSet(numVertices);
 
+        List<Fragmento> mst = new ArrayList<>();
+
+        while (!pq.isEmpty()) {
+            Fragmento fragmento = pq.poll();
+            int conjuntoOrigen = disjointSet.find(obtenerIndiceNodo(fragmento.origen));
+            int conjuntoDestino = disjointSet.find(obtenerIndiceNodo(fragmento.destino));
+
+            if (conjuntoOrigen != conjuntoDestino) {
+                // No hay ciclo, se agrega la arista al árbol de expansión mínima
+                mst.add(fragmento);
+                disjointSet.union(conjuntoOrigen, conjuntoDestino);
+            }
+        }
+
+        // Imprimir el árbol de expansión mínima
+        System.out.println("Árbol de Expansión Mínima:");
+        for (Fragmento fragmento : mst) {
+            System.out.println("-> Nodo: " + fragmento.destino + ", Peso: " + fragmento.peso);
+        }
+    }
+
+    // Clase auxiliar para representar la estructura de conjunto disjunto
+    class DisjointSet {
+        int[] padre;
+
+        DisjointSet(int n) {
+            padre = new int[n];
+            for (int i = 0; i < n; i++) {
+                padre[i] = i;
+            }
+        }
+
+        int find(int x) {
+            if (padre[x] != x) {
+                padre[x] = find(padre[x]);
+            }
+            return padre[x];
+        }
+
+        void union(int x, int y) {
+            int conjuntoX = find(x);
+            int conjuntoY = find(y);
+            padre[conjuntoY] = conjuntoX;
+        }
+    }
 }
-
