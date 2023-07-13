@@ -180,31 +180,49 @@ public class Grafo {
         }
     }
 
-    // construye el texto completo a partir de los fragmentos
-    public String construirTexto(List<Fragmento> arbolExpansion) {
+    // devuelve los fragmentos del grafo ordenados de mayor a menor por peso
+    public List<Fragmento> obtenerFragmentosOrdenados() {
+        List<Fragmento> mst = kruskalMST();
+        List<Fragmento> fragmentosOrdenados = new ArrayList<>();
+
+        // Agregar los primeros fragmentos del árbol de expansión mínima a la lista ordenada
+        fragmentosOrdenados.add(mst.get(0));
+
+        for (int i = 1; i < mst.size(); i++) {
+            Fragmento fragmentoActual = mst.get(i);
+            int index = 0;
+
+            // Buscar el índice donde debe insertarse el fragmento actual en la lista ordenada
+            while (index < fragmentosOrdenados.size() && fragmentoActual.peso < fragmentosOrdenados.get(index).peso) {
+                index++;
+            }
+
+            // Insertar el fragmento actual en la posición adecuada
+            fragmentosOrdenados.add(index, fragmentoActual);
+        }
+
+        return fragmentosOrdenados;
+    }
+
+    public String construirTextoOriginal() {
+        List<Fragmento> fragmentosOrdenados = obtenerFragmentosOrdenados();
         StringBuilder texto = new StringBuilder();
-        Set<String> visitados = new HashSet<>();
 
         // Agregar el primer fragmento al texto
-        Fragmento primerFragmento = arbolExpansion.get(0);
+        Fragmento primerFragmento = fragmentosOrdenados.get(0);
         texto.append(primerFragmento.origen).append(primerFragmento.destino.substring(primerFragmento.peso));
 
-        visitados.add(primerFragmento.origen);
-        visitados.add(primerFragmento.destino);
+        // Construir el texto iterando sobre los fragmentos ordenados
+        for (int i = 1; i < fragmentosOrdenados.size(); i++) {
+            Fragmento fragmento = fragmentosOrdenados.get(i);
 
-        // Construir el texto iterando sobre los fragmentos del árbol de expansión mínima
-        for (int i = 1; i < arbolExpansion.size(); i++) {
-            Fragmento fragmento = arbolExpansion.get(i);
-
-            // Si el origen ya ha sido visitado, agregar el sufijo del destino al texto
-            if (visitados.contains(fragmento.origen)) {
+            // Verificar si el origen ya está presente en el texto
+            if (texto.toString().contains(fragmento.origen)) {
+                // Agregar el sufijo del destino al texto
                 texto.append(fragmento.destino.substring(fragmento.peso));
-                visitados.add(fragmento.destino);
-            }
-            // Si el destino ya ha sido visitado, agregar el sufijo del origen al texto
-            else if (visitados.contains(fragmento.destino)) {
+            } else {
+                // Agregar el sufijo del origen al texto
                 texto.append(fragmento.origen.substring(fragmento.peso));
-                visitados.add(fragmento.origen);
             }
         }
 

@@ -1,4 +1,5 @@
 import domain.Grafo;
+import domain.Menu;
 import domain.Shotgun;
 import services.ArchivoDAO;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        /*
         String path = "fragmentos.txt";
         Shotgun shotgun = new Shotgun();
         ArchivoDAO archivoDAO = new ArchivoDAO();
@@ -14,25 +16,29 @@ public class Main {
         // crear archivo
         archivoDAO.generaArchivo("texto.txt");
 
-        int var = 500;
+        int var = 900;
 
-        shotgun.fragmentador(var,5);
+        shotgun.fragmentador(var,50);
         Grafo grafo = new Grafo(var);
 
         grafo.asignarShotgun(shotgun);
         grafo.compararFragmentos();
+
         // imprimir grafo conexo
         //grafo.imprimirGrafo();
 
         // imprimir grafo kruskal
         grafo.kruskalMST();
 
-        List<Grafo.Fragmento> arbolExpansion = grafo.obtenerArbolExpansionMinima();
-
-
-        String textoCompleto = grafo.construirTexto(arbolExpansion);
+        String textoCompleto = grafo.construirTextoOriginal();
         System.out.println("\n");
         System.out.println("Texto completo: " + textoCompleto);
+
+         */
+
+        Menu menu = new Menu();
+
+        menu.menuPrincipal();
 
     }
 }
