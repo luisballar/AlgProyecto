@@ -13,11 +13,15 @@ public class ArchivoDAO {
     // crea el archivo en una ruta
     public void generaArchivo(String path){
         File archivo = new File(path);
-        try {
-            FileWriter imprimir = new FileWriter(archivo);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        if(!archivo.exists()) {
+            try {
+                FileWriter imprimir = new FileWriter(archivo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else
+            System.out.println("ARCHIVO EXISTE");
     }
 
     // escribe en el archivo

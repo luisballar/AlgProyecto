@@ -1,4 +1,4 @@
-import domain.AssemblyOverlapGraph;
+import domain.Grafo;
 import domain.Shotgun;
 import services.ArchivoDAO;
 
@@ -8,22 +8,20 @@ public class Main {
     public static void main(String[] args) throws IOException {
         String path = "fragmentos.txt";
         Shotgun shotgun = new Shotgun();
-        AssemblyOverlapGraph assemblyGraph = new AssemblyOverlapGraph();
         ArchivoDAO archivoDAO = new ArchivoDAO();
 
-        shotgun.fragmentador(8,10);
+        // crear archivo
+        archivoDAO.generaArchivo("texto.txt");
 
-        assemblyGraph.insertarFragmentos(archivoDAO.contarFragmentosEnArchivo(path));
-        assemblyGraph.asignarShotgun(shotgun);
+        int var = 100;
 
-        // Imprimir el grafo
-        assemblyGraph.printGraph();
+        shotgun.fragmentador(var,5);
+        Grafo grafo = new Grafo(var);
 
-       System.out.println(archivoDAO.contarFragmentosEnArchivo(path));
-
-        System.out.println("-------------");
-        assemblyGraph.listaFragmentos();
-
+        grafo.asignarShotgun(shotgun);
+        grafo.compararFragmentos();
+        grafo.imprimirGrafo();
 
     }
 }
+
