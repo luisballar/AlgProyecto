@@ -53,10 +53,11 @@ public class Grafo {
                 return i;
             }
         }
-        return -1; // El nodo no existe en el grafo
+        return -1; // el nodo no existe en el grafo
     }
 
-    public void imprimirGrafo() {
+    // imprime el grafo conexo
+    public void imprimirGrafoConexo() {
         for (int i = 0; i < numVertices; i++) {
             List<Fragmento> lista = listaAdyacencia.get(i);
             System.out.println("Lista de adyacencia del fragmento " + i + ": ");
@@ -97,7 +98,7 @@ public class Grafo {
     }
 
     // compara el traslape de f1 y f2
-    public int compararTraslape(String fragmento1, String fragmento2) {
+    private int compararTraslape(String fragmento1, String fragmento2) {
         int traslape = 0;
 
         // Comparar cada subcadena de fragmento1 con fragmento2

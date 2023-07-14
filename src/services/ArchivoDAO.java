@@ -6,6 +6,9 @@
 package services;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 
 public class ArchivoDAO {
@@ -53,6 +56,7 @@ public class ArchivoDAO {
         return sb.toString();
     }
 
+    // cuenta los fragmentos del archivo
     public int contarFragmentosEnArchivo(String filePath) {
         int contador = 0;
 
@@ -70,6 +74,42 @@ public class ArchivoDAO {
         }
 
         return contador;
+    }
+
+    // devuelve los fragmentos del archivo
+    public List<String> fragmentosEnArchivo(String filePath) {
+        File file = new File(filePath);
+        List<String> tokens = new ArrayList<>();
+
+        if(!file.exists())
+            return tokens; // retorna la lista vacía
+        else{
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                String linea;
+
+                while ((linea = reader.readLine()) != null) {
+                    StringTokenizer tokenizer = new StringTokenizer(linea);
+
+                    if (tokenizer.hasMoreTokens()) {
+                        String token = tokenizer.nextToken();
+                        tokens.add(token);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return tokens;
+    }
+
+
+    // borra el archivo
+    public void deleteFile(String path){
+        File file = new File(path);
+        file.delete();
     }
 
 
