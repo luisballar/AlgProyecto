@@ -16,9 +16,9 @@ public class Main {
         // crear archivo
         archivoDAO.generaArchivo("texto.txt");
 
-        int var = 900;
+        int var = 10;
 
-        shotgun.fragmentador(var,50);
+        shotgun.fragmentador(var,13);
         Grafo grafo = new Grafo(var);
 
         grafo.asignarShotgun(shotgun);
@@ -34,11 +34,13 @@ public class Main {
         System.out.println("\n");
         System.out.println("Texto completo: " + textoCompleto);
 
+
          */
 
-        Menu menu = new Menu();
 
-        menu.menuPrincipal();
+
+       Menu menu = new Menu();
+       menu.menuPrincipal();
 
     }
 }

@@ -11,7 +11,7 @@ public class Grafo {
     private int numVertices;
     private List<List<Fragmento>> listaAdyacencia;
 
-    // representa un nodo (fragmento) con su peso
+    // representa un nodo (fragmento)
     public class Fragmento {
         String destino;
         String origen;
@@ -22,27 +22,52 @@ public class Grafo {
             this.destino = destino;
             this.peso = peso;
         }
+
+        public int getPeso() {
+            return peso;
+        }
+
+        public String getDestino() {
+            return destino;
+        }
     }
 
     public Grafo(int numVertices) {
         this.numVertices = numVertices;
         listaAdyacencia = new ArrayList<>(numVertices);
 
-        // Inicializar la lista de adyacencia
+        // inicializa la lista de adyacencia
         for (int i = 0; i < numVertices; i++) {
             listaAdyacencia.add(new LinkedList<>());
         }
     }
 
-    // apuntar en memoria a shotgun
+    // apunta en memoria a shotgun
     public void asignarShotgun(Shotgun shotgun) {
         this.sgn = shotgun;
     }
 
     // agrega nodos al grafo
     public void agregarArista(String origen, String destino, int peso) {
-        listaAdyacencia.get(obtenerIndiceNodo(origen)).add(new Fragmento(origen, destino, peso));
-        listaAdyacencia.get(obtenerIndiceNodo(destino)).add(new Fragmento(destino, origen, peso));
+        int indiceOrigen = obtenerIndiceNodo(origen);
+        int indiceDestino = obtenerIndiceNodo(destino);
+
+        // si los nodos existen
+        if (indiceOrigen != -1 && indiceDestino != -1) {
+            List<Fragmento> listaOrigen = listaAdyacencia.get(indiceOrigen);
+            List<Fragmento> listaDestino = listaAdyacencia.get(indiceDestino);
+
+            Fragmento nuevaAristaOrigen = new Fragmento(origen, destino, peso);
+            Fragmento nuevaAristaDestino = new Fragmento(destino, origen, peso);
+
+            if (!listaOrigen.contains(nuevaAristaOrigen)) {
+                listaOrigen.add(nuevaAristaOrigen);
+            }
+
+            if (!listaDestino.contains(nuevaAristaDestino)) {
+                listaDestino.add(nuevaAristaDestino);
+            }
+        }
     }
 
     private int obtenerIndiceNodo(String nodo) {
@@ -65,6 +90,39 @@ public class Grafo {
                 System.out.println("-> Nodo: " + fragmento.destino + ", Peso: " + fragmento.peso);
             }
             System.out.println();
+        }
+    }
+
+    // imprime la lista de fragmentos de mayor a menor segun su peso
+    public void imprimirMayorMenor() {
+        List<Fragmento> fragmentosOrdenados = new ArrayList<>();
+
+        for (List<Fragmento> lista : listaAdyacencia) {
+            fragmentosOrdenados.addAll(lista);
+        }
+
+        fragmentosOrdenados.sort((f1, f2) -> Integer.compare(f2.getPeso(), f1.getPeso()));
+
+        System.out.println("Lista de fragmentos ordenados por peso (de mayor a menor):");
+        for (Fragmento fragmento : fragmentosOrdenados) {
+            System.out.println("-> Nodo: " + fragmento.getDestino() + ", Peso: " + fragmento.getPeso());
+        }
+    }
+
+
+    // imprime la lista de fragmentos de menor a mayor segun su peso
+    public void imprimirMenorMayor() {
+        List<Fragmento> fragmentosOrdenados = new ArrayList<>();
+
+        for (List<Fragmento> lista : listaAdyacencia) {
+            fragmentosOrdenados.addAll(lista);
+        }
+
+        fragmentosOrdenados.sort(Comparator.comparingInt(Fragmento::getPeso));
+
+        System.out.println("Lista de fragmentos ordenados por peso (de menor a mayor):");
+        for (Fragmento fragmento : fragmentosOrdenados) {
+            System.out.println("-> Nodo: " + fragmento.getDestino() + ", Peso: " + fragmento.getPeso());
         }
     }
 
@@ -130,7 +188,7 @@ public class Grafo {
             }
         }
 
-        // Estructura de conjunto para verificar ciclos
+        // estructura de conjunto para verificar ciclos
         DisjointSet disjointSet = new DisjointSet(numVertices);
 
         List<Fragmento> mst = new ArrayList<>();

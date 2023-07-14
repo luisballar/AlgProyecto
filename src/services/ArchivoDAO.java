@@ -6,9 +6,7 @@
 package services;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class ArchivoDAO {
@@ -23,8 +21,7 @@ public class ArchivoDAO {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }else
-            System.out.println("ARCHIVO EXISTE");
+        }
     }
 
     // escribe en el archivo
@@ -35,7 +32,7 @@ public class ArchivoDAO {
             FileWriter imprimir = new FileWriter(archivo, false);
             imprimir.append(textoGenerado);
             imprimir.close();
-            System.out.println("Se agregó el texto");
+            //System.out.println("Se agregó el texto");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,35 +42,47 @@ public class ArchivoDAO {
         StringBuilder sb =  new StringBuilder();
         File archivo = new File(path);
 
-        try (BufferedReader rd = new BufferedReader(new FileReader(archivo))){
-            String ln;
-            while((ln = rd.readLine()) != null){
-                sb.append(ln).append("\n");
+        if(existe(path) == true){
+            try (BufferedReader rd = new BufferedReader(new FileReader(archivo))){
+                String ln;
+                while((ln = rd.readLine()) != null){
+                    sb.append(ln).append("\n");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            return sb.toString();
+
+        }else{
+            return "El archivo no existe";
         }
-        return sb.toString();
+
+
     }
 
     // cuenta los fragmentos del archivo
     public int contarFragmentosEnArchivo(String filePath) {
         int contador = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String linea;
+        if(existe(filePath)){
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                String linea;
 
-            while ((linea = reader.readLine()) != null) {
-                // Verificar si la línea no está vacía
-                if (!linea.trim().isEmpty()) {
-                    contador++;
+                while ((linea = reader.readLine()) != null) {
+                    // Verificar si la línea no está vacía
+                    if (!linea.trim().isEmpty()) {
+                        contador++;
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return contador;
+            return contador;
+
+        }else
+            return 0;
+
     }
 
     // devuelve los fragmentos del archivo
@@ -89,7 +98,7 @@ public class ArchivoDAO {
                 String linea;
 
                 while ((linea = reader.readLine()) != null) {
-                    StringTokenizer tokenizer = new StringTokenizer(linea);
+                    StringTokenizer tokenizer = new StringTokenizer(linea, "\n");
 
                     if (tokenizer.hasMoreTokens()) {
                         String token = tokenizer.nextToken();
@@ -105,6 +114,53 @@ public class ArchivoDAO {
         return tokens;
     }
 
+    public List<String> palabraClaveBuscar(String path, String palabraClave) {
+        List<String> fragmentosEncontrados = new ArrayList<>();
+
+        List<String> fragmentos = fragmentosEnArchivo(path);
+
+        for (String fragmento : fragmentos) {
+            if (fragmento.contains(palabraClave)) {
+                fragmentosEncontrados.add(fragmento);
+            }
+        }
+
+        return fragmentosEncontrados;
+    }
+
+    // cuenta palabras en el archivo
+    public int contarPalabrasEnArchivo(String filePath) {
+        int contador = 0;
+
+        if (existe(filePath)) {
+            String contenido = leerArchivo(filePath);
+            StringTokenizer tokenizer = new StringTokenizer(contenido);
+
+            while (tokenizer.hasMoreTokens()) {
+                tokenizer.nextToken();
+                contador++;
+            }
+        }
+
+        return contador;
+    }
+
+
+    // ordena fragmentos por longitud
+    public List<String> ordenarFragmentosPorLongitud(String filePath) {
+        List<String> fragmentos = fragmentosEnArchivo(filePath);
+
+        // Ordenar los fragmentos por longitud en orden descendente
+        Collections.sort(fragmentos, Comparator.comparingInt(String::length).reversed());
+
+        return fragmentos;
+    }
+
+    public int caracteresFile(String path) throws IOException {
+        String caracteres = leerArchivo(path);
+        return caracteres.length();
+    }
+
 
     // borra el archivo
     public void deleteFile(String path){
@@ -112,5 +168,14 @@ public class ArchivoDAO {
         file.delete();
     }
 
+    public boolean existe(String path){
+        File file = new File(path);
+
+        if(file.exists())
+            return true;
+        else
+            return false;
+
+    }
 
 }
