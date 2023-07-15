@@ -17,19 +17,8 @@ public class Menu {
     int fragmentos;
 
     public void menuPrincipal(){
-        StringBuilder sB = new StringBuilder("Menu Principal")
-                .append("\n Elija una opción:")
-                .append("\n Opción 1: INSERTAR TEXTO")
-                .append("\n Opción 2: FRAGMENTAR TEXTO")
-                .append("\n Opción 3: MOSTRAR FRAGMENTOS POR LARGO DE HILERA")
-                .append("\n Opción 4: MOSTAR FRAGMENTOS EN ORDEN ALFABÉTICO")
-                .append("\n Opción 5: MOSTRAR FRAGMENTOS DE MENOR A MAYOR")
-                .append("\n Opción 6: MOSTRAR FRAGMENTOS DE MAYOR A MENOR")
-                .append("\n Opción 7: MOSTRAR FRAGMENTOS POR PALABRA CLAVE")
-                .append("\n Opción 8: RECONSTRUIR TEXTO")
-                .append("\n Opción 9: Salir\n");
 
-        System.out.println(sB.toString());
+        System.out.println(builderOptions());
 
         try {
             entradaOpcion();
@@ -54,6 +43,8 @@ public class Menu {
                     String texto = entrada.nextLine().trim();
 
                     archivoDAO.insertarTexto(path, texto);
+                    System.out.println("INSERTADO CON ÉXITO");
+
                     break;
 
                 case 2: // fragmentar
@@ -181,7 +172,9 @@ public class Menu {
                         System.out.println("TEXTO CONSTRUIDO");
                         System.out.println(grafo.construirTextoOriginal());
                         System.out.println("--------------------------------------------------------------------------------" + "\n");
+                        System.out.println("TEXTO ORIGINAL");
                         System.out.println(archivoDAO.leerArchivo(path));
+                        System.out.println("--------------------------------------------------------------------------------" + "\n");
                     }
                     break;
             }
@@ -191,7 +184,24 @@ public class Menu {
                 break;
             }
             System.out.println("\n| | | INGRESE OTRA OPCIÓN | | |");
+            System.out.println(builderOptions());
             opcion = entrada.nextInt();
         }
+    }
+
+    private String builderOptions(){
+        StringBuilder sB = new StringBuilder("Menu Principal")
+                .append("\n Elija una opción:")
+                .append("\n Opción 1: INSERTAR TEXTO")
+                .append("\n Opción 2: FRAGMENTAR TEXTO")
+                .append("\n Opción 3: MOSTRAR FRAGMENTOS POR LARGO DE HILERA")
+                .append("\n Opción 4: MOSTAR FRAGMENTOS EN ORDEN ALFABÉTICO")
+                .append("\n Opción 5: MOSTRAR FRAGMENTOS DE MENOR A MAYOR")
+                .append("\n Opción 6: MOSTRAR FRAGMENTOS DE MAYOR A MENOR")
+                .append("\n Opción 7: MOSTRAR FRAGMENTOS POR PALABRA CLAVE")
+                .append("\n Opción 8: RECONSTRUIR TEXTO")
+                .append("\n Opción 9: Salir\n");
+
+        return sB.toString();
     }
 }
