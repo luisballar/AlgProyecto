@@ -72,8 +72,6 @@ public class Menu {
 
                     break;
 
-
-
                 case 3:
                     List<String> fragmentosOrdenados = archivoDAO.ordenarFragmentosPorLongitud(pathFragmentos);
 
