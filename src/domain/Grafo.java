@@ -205,11 +205,14 @@ public class Grafo {
             }
         }
 
+        /*
         // Imprimir el árbol de expansión mínima
         System.out.println("Árbol de Expansión Mínima (nodos de mayor peso):");
         for (Fragmento fragmento : mst) {
             System.out.println("-> Nodo: " + fragmento.destino + ", Peso: " + fragmento.peso);
         }
+
+         */
 
         return mst;
     }

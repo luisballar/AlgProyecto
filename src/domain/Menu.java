@@ -81,6 +81,23 @@ public class Menu {
 
                     break;
 
+
+
+                case 3:
+                    List<String> fragmentosOrdenados = archivoDAO.ordenarFragmentosPorLongitud(pathFragmentos);
+
+                    if(!archivoDAO.existe(pathFragmentos)){
+                        System.out.println("AUN NO HAY FRAGMENTOS");
+                    }else if (fragmentosOrdenados == null || fragmentosOrdenados.size() == 0) {
+                        System.out.println("AUN NO HAY FRAGMENTOS");
+
+                    }else {
+                        for (String fragmento : fragmentosOrdenados) {
+                            System.out.println(fragmento);
+                        }
+                    }
+                    break;
+
                 case 4: // ordena la lista alfabéticamente
                     List<String> listFragmentos = archivoDAO.fragmentosEnArchivo(pathFragmentos);
 
@@ -152,23 +169,29 @@ public class Menu {
                     break;
 
                 case 8: // reconstruye el texto
-                    grafo.kruskalMST();
 
+                    if(fragmentadorClass == null){
+                        System.out.println("EL FRAGMENTADOR NO SE HA INCIADO, USELO PRIMERO");
+                    }else{
+                        grafo = new Grafo(fragmentos);
+                        grafo.asignarShotgun(fragmentadorClass);
+                        grafo.obtenerArbolExpansionMinima();
+
+                        System.out.println("--------------------------------------------------------------------------------" + "\n");
+                        System.out.println("TEXTO CONSTRUIDO");
+                        System.out.println(grafo.construirTextoOriginal());
+                        System.out.println("--------------------------------------------------------------------------------" + "\n");
+                        System.out.println(archivoDAO.leerArchivo(path));
+                    }
+                    break;
             }
             // si la entrada es 11 sale completamente
             if (opcion == 9) {
                 System.out.println("HA SALIDO DEL MENÚ");
                 break;
             }
-
             System.out.println("\n| | | INGRESE OTRA OPCIÓN | | |");
-
             opcion = entrada.nextInt();
-
-
         }
-
-
     }
-
 }

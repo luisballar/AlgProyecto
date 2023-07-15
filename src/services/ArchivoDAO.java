@@ -146,7 +146,7 @@ public class ArchivoDAO {
     }
 
 
-    // ordena fragmentos por longitud
+    // ordena fragmentos por longitud (mayor a menor)
     public List<String> ordenarFragmentosPorLongitud(String filePath) {
         List<String> fragmentos = fragmentosEnArchivo(filePath);
 
@@ -168,6 +168,7 @@ public class ArchivoDAO {
         file.delete();
     }
 
+    // verifica si existe el archivo
     public boolean existe(String path){
         File file = new File(path);
 
